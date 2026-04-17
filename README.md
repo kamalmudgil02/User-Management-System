@@ -209,6 +209,51 @@ User-Management-System/
 - Input validation
 - XSS protection
 
+## Deployment
+
+### Deploy Backend to Render
+
+1. Push your code to GitHub
+2. Go to [Render Dashboard](https://dashboard.render.com/)
+3. Click "New +" and select "Web Service"
+4. Connect your GitHub repository
+5. Configure the service:
+   - **Name**: user-management-api
+   - **Region**: Oregon (US West)
+   - **Branch**: main
+   - **Root Directory**: server
+   - **Build Command**: `npm install`
+   - **Start Command**: `npm start`
+6. Add environment variables:
+   - `NODE_ENV`: production
+   - `MONGODB_URI`: Your MongoDB Atlas connection string
+   - `JWT_SECRET`: A secure random string
+   - `JWT_EXPIRES_IN`: 7d
+   - `CLIENT_URL`: Your Netlify URL (add after frontend deployment)
+7. Click "Create Web Service"
+8. Copy your Render URL (e.g., `https://your-app-name.onrender.com`)
+
+### Deploy Frontend to Netlify
+
+1. Go to [Netlify](https://app.netlify.com/)
+2. Click "Add new site" > "Import an existing project"
+3. Connect to GitHub and select your repository
+4. Configure build settings:
+   - **Base directory**: client
+   - **Build command**: `npm run build`
+   - **Publish directory**: client/dist
+5. Add environment variable:
+   - `VITE_API_URL`: Your Render backend URL + `/api` (e.g., `https://your-app-name.onrender.com/api`)
+6. Click "Deploy site"
+7. After deployment, copy your Netlify URL
+8. Go back to Render and update the `CLIENT_URL` environment variable with your Netlify URL
+
+### Post-Deployment Steps
+
+1. Update MongoDB Atlas Network Access to allow connections from Render (0.0.0.0/0 for all IPs)
+2. Test the deployed application
+3. Update the README with your live URLs
+
 ## Contributing
 
 1. Fork the repository
