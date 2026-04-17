@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard,
   Users,
@@ -148,10 +148,7 @@ const AppLayout = ({ children }) => {
       {/* Mobile Sidebar Backdrop */}
       <AnimatePresence>
         {sidebarOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+          <div
             onClick={() => setSidebarOpen(false)}
             className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           />
@@ -223,17 +220,11 @@ const AppLayout = ({ children }) => {
                 <AnimatePresence>
                   {showUserMenu && (
                     <>
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
+                      <div
                         className="fixed inset-0 z-40"
                         onClick={() => setShowUserMenu(false)}
                       />
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
+                      <div
                         className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
                       >
                         <div className="p-4 border-b border-gray-100">
@@ -270,7 +261,7 @@ const AppLayout = ({ children }) => {
                             <span className="text-sm font-medium">Logout</span>
                           </button>
                         </div>
-                      </motion.div>
+                      </div>
                     </>
                   )}
                 </AnimatePresence>
@@ -283,13 +274,9 @@ const AppLayout = ({ children }) => {
         <main className="flex-1 overflow-auto">
           <div className="p-4 lg:p-8">
             {/* Page Content */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
+            <div>
               {children}
-            </motion.div>
+            </div>
           </div>
         </main>
       </div>

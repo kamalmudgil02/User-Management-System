@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { CheckCircle, XCircle, AlertCircle, X } from 'lucide-react';
 
 const ToastContext = createContext();
@@ -53,10 +53,7 @@ const Toast = ({ message, type, onClose }) => {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 100 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 100 }}
+    <div
       className={`${colors[type]} border rounded-lg p-4 shadow-lg flex items-start gap-3`}
     >
       {icons[type]}
@@ -64,7 +61,7 @@ const Toast = ({ message, type, onClose }) => {
       <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
         <X className="w-4 h-4" />
       </button>
-    </motion.div>
+    </div>
   );
 };
 

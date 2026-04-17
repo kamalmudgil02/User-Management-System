@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { X, User, Mail, Shield, CheckCircle, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { useNotifications } from '../../contexts/NotificationContext';
@@ -99,17 +99,11 @@ const UserFormModal = ({ user, onClose, onSuccess }) => {
 
   return (
     <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
+      <div
         className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
         onClick={onClose}
       >
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        <div
           onClick={(e) => e.stopPropagation()}
           className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
         >
@@ -134,13 +128,11 @@ const UserFormModal = ({ user, onClose, onSuccess }) => {
           {/* Form */}
           <form onSubmit={handleSubmit} className="p-6 space-y-5">
             {errors.api && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
+              <div
                 className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-800"
               >
                 {errors.api}
-              </motion.div>
+              </div>
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -164,13 +156,11 @@ const UserFormModal = ({ user, onClose, onSuccess }) => {
                   />
                 </div>
                 {errors.name && (
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
+                  <p
                     className="text-xs text-red-600"
                   >
                     {errors.name}
-                  </motion.p>
+                  </p>
                 )}
               </div>
 
@@ -194,13 +184,11 @@ const UserFormModal = ({ user, onClose, onSuccess }) => {
                   />
                 </div>
                 {errors.email && (
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
+                  <p
                     className="text-xs text-red-600"
                   >
                     {errors.email}
-                  </motion.p>
+                  </p>
                 )}
               </div>
 
@@ -290,13 +278,11 @@ const UserFormModal = ({ user, onClose, onSuccess }) => {
                       </button>
                     </div>
                     {errors.password && (
-                      <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
+                      <p
                         className="text-xs text-red-600"
                       >
                         {errors.password}
-                      </motion.p>
+                      </p>
                     )}
                   </div>
                 )}
@@ -346,8 +332,8 @@ const UserFormModal = ({ user, onClose, onSuccess }) => {
               </button>
             </div>
           </form>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </AnimatePresence>
   );
 };

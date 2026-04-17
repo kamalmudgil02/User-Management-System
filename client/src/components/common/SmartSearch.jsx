@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { Search, User, HelpCircle, X } from 'lucide-react';
 import api from '../../utils/api';
 
@@ -22,6 +22,28 @@ const SmartSearch = () => {
     { id: 7, question: 'What notifications will I receive?', path: '/notifications' },
     { id: 8, question: 'How do I change the theme?', path: '/settings' },
   ];
+
+  const performSearch = useCallback(async (searchQuery) => {
+    setLoading(true);
+    try {
+      // Search users
+      const userResponse = await api.get(`/users?search=${encodeURIComponent(searchQuery)}&limit=5`);
+      const users = userResponse.data.data.users || [];
+
+      // Search FAQs
+      const matchedFaqs = faqs.filter(
+        faq => faq.question.toLowerCase().includes(searchQuery.toLowerCase())
+      ).slice(0, 5);
+
+      setResults({ users, faqs: matchedFaqs });
+      setIsOpen(users.length > 0 || matchedFaqs.length > 0);
+    } catch (error) {
+      console.error('Search failed:', error);
+      setResults({ users: [], faqs: [] });
+    } finally {
+      setLoading(false);
+    }
+  }, [faqs]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -45,29 +67,7 @@ const SmartSearch = () => {
     }, 300);
 
     return () => clearTimeout(searchTimeout);
-  }, [query]);
-
-  const performSearch = async (searchQuery) => {
-    setLoading(true);
-    try {
-      // Search users
-      const userResponse = await api.get(`/users?search=${encodeURIComponent(searchQuery)}&limit=5`);
-      const users = userResponse.data.data.users || [];
-
-      // Search FAQs
-      const matchedFaqs = faqs.filter(
-        faq => faq.question.toLowerCase().includes(searchQuery.toLowerCase())
-      ).slice(0, 5);
-
-      setResults({ users, faqs: matchedFaqs });
-      setIsOpen(users.length > 0 || matchedFaqs.length > 0);
-    } catch (error) {
-      console.error('Search failed:', error);
-      setResults({ users: [], faqs: [] });
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [query, performSearch]);
 
   const handleUserClick = (userId) => {
     navigate(`/users/${userId}`);
@@ -121,10 +121,7 @@ const SmartSearch = () => {
       {/* Search Results Popup */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
+          <div
             className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-96 overflow-y-auto"
           >
             {loading ? (
@@ -189,7 +186,7 @@ const SmartSearch = () => {
                 )}
               </>
             )}
-          </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </div>
